@@ -1,0 +1,39 @@
+GoでTodoリストAPIを作成する
+
+最低限
+
+タスクの登録
+POST /task
+
+タスクの一覧取得
+GET /tasks
+
+タスクの削除
+DELETE /task/:id
+
+
+追加実装
+
+タスクの更新
+PUT /task/:id
+
+認証機能
+POST /auth
+
+
+データ構造
+
+Task
+
+id: number
+title varchar(255) 120文字まで
+description varchar(5000) 2500文字まで
+createdAt datetime
+deadline datetime
+userId number
+
+User
+
+id number
+name varchar(100) 50文字まで
+password varchar(100) 64文字まで
