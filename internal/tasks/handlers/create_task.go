@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"go-task-app/internal/tasks/types"
 	"go-task-app/internal/tasks/services"
+	"go-task-app/internal/tasks/types"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

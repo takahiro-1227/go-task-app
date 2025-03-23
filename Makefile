@@ -9,6 +9,9 @@ start:
 
 dev:
 	GO_ENV=development go run main.go
+
+format:
+	gofmt -w ./ && golangci-lint run
   
 migrate-up:
 	migrate -path migrations -database "mysql://admin:admin@tcp(localhost:3306)/go_task_app" -verbose up

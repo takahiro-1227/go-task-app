@@ -13,7 +13,7 @@ type Task struct {
 }
 
 var (
-	ErrInvalidInput    = errors.New("タスクのタイトルを入力してください")
-	ErrDuplicateTitle  = errors.New("タスクのタイトルが重複しています")
-	ErrCreateFailed    = errors.New("タスクの作成に失敗しました")
+	ErrInvalidInput   = errors.New("タスクのタイトルを入力してください")
+	ErrDuplicateTitle = errors.New("タスクのタイトルが重複しています")
+	ErrCreateFailed   = errors.New("タスクの作成に失敗しました")
 )
