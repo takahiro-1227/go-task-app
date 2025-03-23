@@ -13,8 +13,9 @@ func main() {
 
 	router := gin.Default()
 
-	router.GET("/tasks", tasks_handlers.GetTasksHandler)
-	router.POST("/task", tasks_handlers.CreateTaskHandler)
+	router.GET("/tasks", tasks_handlers.GetTasks)
+	router.POST("/task", tasks_handlers.CreateTask)
+	router.DELETE("/task/:id", tasks_handlers.DeleteTask)
 
 	err := router.Run(":4000")
 

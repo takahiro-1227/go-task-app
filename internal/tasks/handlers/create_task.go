@@ -25,7 +25,7 @@ func handleTaskError(c *gin.Context, err error) {
 	}
 }
 
-func CreateTaskHandler(c *gin.Context) {
+func CreateTask(c *gin.Context) {
 	var newTask types.Task
 
 	err := c.ShouldBindJSON(&newTask)
@@ -36,7 +36,7 @@ func CreateTaskHandler(c *gin.Context) {
 		return
 	}
 
-	task, err := services.CreateTaskService(newTask)
+	task, err := services.CreateTask(newTask)
 	if err != nil {
 		handleTaskError(c, err)
 		return

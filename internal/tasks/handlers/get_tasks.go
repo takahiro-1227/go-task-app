@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetTasksHandler(c *gin.Context) {
+func GetTasks(c *gin.Context) {
 	var tasks []types.Task
 
 	result := config.DB.Find(&tasks)
