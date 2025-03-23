@@ -7,7 +7,7 @@ import (
 	"log"
 )
 
-func CreateTaskService(newTask types.Task) (*types.Task, error) {
+func CreateTask(newTask types.Task) (*types.Task, error) {
 	if newTask.Title == "" {
 		return nil, types.ErrInvalidInput
 	}
