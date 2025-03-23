@@ -16,7 +16,7 @@ func main() {
 	router.GET("/tasks", tasks_handlers.GetTasksHandler)
 	router.POST("/task", tasks_handlers.CreateTaskHandler)
 
-	err := router.Run(":3000")
+	err := router.Run(":4000")
 
 	if err != nil {
 		log.Fatalf("サーバーの起動に失敗しました: %v", err)
