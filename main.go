@@ -2,7 +2,7 @@ package main
 
 import (
 	"go-task-app/internal/config"
-	"go-task-app/internal/tasks"
+	tasks_handlers "go-task-app/internal/tasks/handlers"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -13,9 +13,10 @@ func main() {
 
 	router := gin.Default()
 
-	router.GET("/tasks", tasks.GetTasks)
-	router.POST("/task", tasks.CreateTask)
-	err := router.Run("localhost:4000")
+	router.GET("/tasks", tasks_handlers.GetTasksHandler)
+	router.POST("/task", tasks_handlers.CreateTaskHandler)
+
+	err := router.Run(":4000")
 
 	if err != nil {
 		log.Fatalf("サーバーの起動に失敗しました: %v", err)
