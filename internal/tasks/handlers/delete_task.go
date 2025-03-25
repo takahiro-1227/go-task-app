@@ -20,7 +20,7 @@ func DeleteTask(c *gin.Context) {
 	serviceErr := services.DeleteTask(id)
 	if serviceErr != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "タスクを削除できませんでした。",
+			"error": serviceErr.Error(),
 		})
 		return
 	}

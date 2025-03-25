@@ -15,6 +15,7 @@ func main() {
 
 	router.GET("/tasks", tasks_handlers.GetTasks)
 	router.POST("/task", tasks_handlers.CreateTask)
+	router.PUT("/task/:id", tasks_handlers.UpdateTask)
 	router.DELETE("/task/:id", tasks_handlers.DeleteTask)
 
 	err := router.Run(":4000")
