@@ -3,6 +3,7 @@ package main
 import (
 	"go-task-app/internal/config"
 	tasks_handlers "go-task-app/internal/tasks/handlers"
+	users_handlers "go-task-app/internal/users/handlers"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -17,6 +18,8 @@ func main() {
 	router.POST("/task", tasks_handlers.CreateTask)
 	router.PUT("/task/:id", tasks_handlers.UpdateTask)
 	router.DELETE("/task/:id", tasks_handlers.DeleteTask)
+
+	router.POST("/sign-up", users_handlers.SignUp)
 
 	err := router.Run(":4000")
 
