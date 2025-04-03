@@ -18,3 +18,13 @@ type User struct {
 type UserResponse struct {
 	UserBase
 }
+
+type SignInInput struct {
+	Name     string
+	Password string
+}
+
+type SignInResponse struct {
+	AccessToken string
+	User        UserResponse
+}

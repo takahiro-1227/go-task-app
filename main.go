@@ -10,6 +10,7 @@ import (
 )
 
 func main() {
+	config.LoadEnv()
 	config.InitDB()
 
 	router := gin.Default()
@@ -20,6 +21,7 @@ func main() {
 	router.DELETE("/task/:id", tasks_handlers.DeleteTask)
 
 	router.POST("/sign-up", users_handlers.SignUp)
+	router.POST("/sign-in", users_handlers.SignIn)
 
 	err := router.Run(":4000")
 

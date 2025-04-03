@@ -3,6 +3,7 @@ package services
 import (
 	"errors"
 	"go-task-app/internal/config"
+	"go-task-app/internal/users/constants"
 	"go-task-app/internal/users/types"
 	"golang.org/x/crypto/bcrypt"
 	"log"
@@ -70,7 +71,7 @@ func existsDuplicatedUserName(newUser *types.User) bool {
 }
 
 func hashPassword(newUser *types.User) (err error) {
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(newUser.Password), 10)
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(newUser.Password), constants.HashCost)
 
 	if err != nil {
 		return err
