@@ -1,0 +1,5 @@
+ALTER TABLE tasks
+DROP FOREIGN KEY fk_tasks_user,
+DROP COLUMN user_id;
+
+DROP TABLE IF EXISTS users;
