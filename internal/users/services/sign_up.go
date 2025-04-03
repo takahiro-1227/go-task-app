@@ -6,8 +6,6 @@ import (
 	"go-task-app/internal/users/constants"
 	"go-task-app/internal/users/types"
 	"golang.org/x/crypto/bcrypt"
-	"log"
-	"net/http"
 	"strings"
 	"unicode"
 )
@@ -26,19 +24,19 @@ func extractEmptyData(newUser *types.User) []string {
 	}
 
 	if newUser.Password == "" {
-		emptySlices = append(emptySlices, "パスワード")
+		emptySlices = append(emptySlices, keyLabel.Password)
 	}
 
 	return emptySlices
 }
 
 func validatePassword(password string) error {
-	if len(password) < 10 {
-		return errors.New("パスワードは10文字以上で入力してください。")
+	if len(password) <= constants.MinPasswordLength {
+		return constants.ErrMorePasswordLength
 	}
 
-	if len(password) > 33 {
-		return errors.New("パスワードは32文字以内で入力してください。")
+	if len(password) >= constants.MaxPasswordLength {
+		return constants.ErrLessPasswordLength
 	}
 
 	hasLetter := false
@@ -58,7 +56,7 @@ func validatePassword(password string) error {
 	}
 
 	if !hasLetter || !hasNumber || !hasSymbol {
-		return errors.New("パスワードは英数字記号を含める必要があります。")
+		return constants.ErrPasswordCharacterCategory
 	}
 
 	return nil
@@ -82,34 +80,32 @@ func hashPassword(newUser *types.User) (err error) {
 	return nil
 }
 
-func SignUp(newUser *types.User) (*types.UserResponse, int, error) {
+func SignUp(newUser *types.User) (*types.UserResponse, error) {
 	emptySlices := extractEmptyData(newUser)
 
 	if len(emptySlices) > 0 {
-		return nil, http.StatusBadRequest, errors.New(strings.Join(emptySlices, ", ") + "を入力してください。")
+		return nil, errors.New(strings.Join(emptySlices, "、") + constants.ErrSuffixRequiredInput)
 	}
 
 	if err := validatePassword(newUser.Password); err != nil {
-		return nil, http.StatusBadRequest, err
+		return nil, err
 	}
 
 	if existsDuplicatedUserName(newUser) {
-		return nil, http.StatusBadRequest, errors.New("入力されたユーザー名は既に存在します。")
+		return nil, constants.ErrDuplicatedUserName
 	}
 
 	err := hashPassword(newUser)
 
 	if err != nil {
-		log.Println(err.Error())
-		return nil, http.StatusInternalServerError, errors.New("エラーが発生しました。")
+		return nil, err
 	}
 
 	result := config.DB.Create(newUser)
 
 	if result.Error != nil {
-		log.Println(result.Error)
-		return nil, http.StatusInternalServerError, errors.New("ユーザーの作成に失敗しました。")
+		return nil, result.Error
 	}
 
-	return &types.UserResponse{UserBase: newUser.UserBase}, http.StatusCreated, nil
+	return &types.UserResponse{UserBase: newUser.UserBase}, nil
 }

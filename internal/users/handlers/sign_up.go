@@ -1,10 +1,12 @@
 package user
 
 import (
-	"github.com/gin-gonic/gin"
+	"go-task-app/internal/users/helpers"
 	"go-task-app/internal/users/services"
 	"go-task-app/internal/users/types"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 func SignUp(c *gin.Context) {
@@ -18,15 +20,14 @@ func SignUp(c *gin.Context) {
 		return
 	}
 
-	result, code, err := services.SignUp(&newUser)
+	result, err := services.SignUp(&newUser)
 
 	if err != nil {
-		c.JSON(code, gin.H{
-			"error": err.Error(),
-		})
+		helpers.HandleError(c, err)
+		return
 	}
 
-	c.JSON(code, gin.H{
+	c.JSON(http.StatusAccepted, gin.H{
 		"user": result,
 	})
 }

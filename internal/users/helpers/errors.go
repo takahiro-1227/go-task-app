@@ -13,7 +13,7 @@ func HandleError(c *gin.Context, err error) {
 	log.Println(err.Error())
 
 	switch err {
-	case constants.ErrSignIn:
+	case constants.ErrSignIn, constants.ErrLessPasswordLength, constants.ErrMorePasswordLength, constants.ErrDuplicatedUserName, constants.ErrPasswordCharacterCategory:
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
@@ -22,7 +22,7 @@ func HandleError(c *gin.Context, err error) {
 			"error": err.Error(),
 		})
 	default:
-		if strings.Contains(err.Error(), "は必須です。") {
+		if strings.Contains(err.Error(), constants.ErrSuffixRequiredInput) {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"error": err.Error(),
 			})
