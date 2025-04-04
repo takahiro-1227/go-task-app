@@ -23,14 +23,14 @@ func UpdateTask(c *gin.Context) {
 
 	err = c.ShouldBindJSON(&newTask)
 
-	newTask.ID = uint(id)
-
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "入力値が不正です。",
 		})
 		return
 	}
+
+	newTask.ID = uint(id)
 
 	result, err := services.UpdateTask(&newTask)
 

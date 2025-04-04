@@ -1,22 +1,18 @@
 package handlers
 
 import (
-	"go-task-app/internal/config"
-	"go-task-app/internal/tasks/types"
+	"go-task-app/internal/tasks/helpers"
+	"go-task-app/internal/tasks/services"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 func GetTasks(c *gin.Context) {
-	var tasks []types.Task
+	tasks, err := services.GetTasks()
 
-	result := config.DB.Find(&tasks)
-
-	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "タスクの取得に失敗しました。",
-		})
+	if err != nil {
+		helpers.HandleTaskError(c, err)
 		return
 	}
 
