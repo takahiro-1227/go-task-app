@@ -4,6 +4,7 @@ import (
 	"go-task-app/internal/users/helpers"
 	"go-task-app/internal/users/services"
 	"go-task-app/internal/users/types"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -14,6 +15,7 @@ func SignUp(c *gin.Context) {
 
 	err := c.ShouldBindJSON(&newUser)
 	if err != nil {
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "入力値が不正です。",
 		})
