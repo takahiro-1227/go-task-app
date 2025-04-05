@@ -31,6 +31,7 @@ func UpdateTask(c *gin.Context) {
 	}
 
 	newTask.ID = uint(id)
+	newTask.UserId = helpers.GetUserIdFromContext(c)
 
 	result, err := services.UpdateTask(&newTask)
 

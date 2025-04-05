@@ -19,7 +19,7 @@ func decodeJWT(tokenString string) (*jwt.MapClaims, error) {
 		_, ok := token.Method.(*jwt.SigningMethodHMAC)
 		if !ok {
 			log.Println("署名方法が違います。")
-			return nil, ErrInvalidToken 
+			return nil, ErrInvalidToken
 		}
 
 		return []byte(config.AuthSecret), nil
@@ -40,38 +40,38 @@ func decodeJWT(tokenString string) (*jwt.MapClaims, error) {
 
 func Auth() gin.HandlerFunc {
 	return func(c *gin.Context) {
-			tokenString := c.GetHeader("Authorization")
+		tokenString := c.GetHeader("Authorization")
 
-			if tokenString == "" || !strings.HasPrefix(tokenString, "Bearer ") {
-					c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "アクセストークンが付与されていません。"})
-					return
-			}
-			
-			tokenString = strings.TrimPrefix(tokenString, "Bearer ")
-
-			claims, err := decodeJWT(tokenString)
-
-			if err != nil {
-				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-					"error": err.Error(),
-				})
-				return
-			}
-
-			userId := int((*claims)["userId"].(float64))
-			expiresInUnix := int64((*claims)["expiresIn"].(float64))
-			expiresIn := time.Unix(expiresInUnix, 0)
-
-			expired := time.Now().After(expiresIn)
-
-			if expired {
-				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-					"error": errors.New("アクセストークンの期限が切れています。"),
-				})
-				return
-			}
-
-			c.Set("userId", userId)
-			c.Next()
+		if tokenString == "" || !strings.HasPrefix(tokenString, "Bearer ") {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "アクセストークンが付与されていません。"})
+			return
 		}
+
+		tokenString = strings.TrimPrefix(tokenString, "Bearer ")
+
+		claims, err := decodeJWT(tokenString)
+
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+
+		userId := int((*claims)["userId"].(float64))
+		expiresInUnix := int64((*claims)["expiresIn"].(float64))
+		expiresIn := time.Unix(expiresInUnix, 0)
+
+		expired := time.Now().After(expiresIn)
+
+		if expired {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+				"error": errors.New("アクセストークンの期限が切れています。"),
+			})
+			return
+		}
+
+		c.Set("userId", userId)
+		c.Next()
+	}
 }

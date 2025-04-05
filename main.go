@@ -20,24 +20,11 @@ func main() {
 
 	authGroup.Use(middlewares.Auth())
 	{
-		authGroup.GET("/", func(c *gin.Context) {
-			userId, exists := c.Get("userId")
-			if !exists {
-				c.Status(401)
-				return
-			}
-			c.JSON(200, gin.H{
-				"status": "ok",
-				"userId": userId,
-			})
-		})
+		authGroup.GET("/tasks", tasks_handlers.GetTasks)
+		authGroup.POST("/task", tasks_handlers.CreateTask)
+		authGroup.PUT("/task/:id", tasks_handlers.UpdateTask)
+		authGroup.DELETE("/task/:id", tasks_handlers.DeleteTask)
 	}
-
-	router.GET("/tasks", tasks_handlers.GetTasks)
-	router.POST("/task", tasks_handlers.CreateTask)
-	router.PUT("/task/:id", tasks_handlers.UpdateTask)
-	router.DELETE("/task/:id", tasks_handlers.DeleteTask)
-
 	router.POST("/sign-up", users_handlers.SignUp)
 	router.POST("/sign-in", users_handlers.SignIn)
 
