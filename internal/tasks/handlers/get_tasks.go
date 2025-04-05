@@ -9,7 +9,9 @@ import (
 )
 
 func GetTasks(c *gin.Context) {
-	tasks, err := services.GetTasks()
+	userId := helpers.GetUserIdFromContext(c)
+
+	tasks, err := services.GetTasks(userId)
 
 	if err != nil {
 		helpers.HandleTaskError(c, err)

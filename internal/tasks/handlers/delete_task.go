@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"go-task-app/internal/tasks/helpers"
 	"go-task-app/internal/tasks/services"
 	"net/http"
 	"strconv"
@@ -17,13 +18,13 @@ func DeleteTask(c *gin.Context) {
 		return
 	}
 
-	serviceErr := services.DeleteTask(id)
-	if serviceErr != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": serviceErr.Error(),
-		})
+	userId := helpers.GetUserIdFromContext(c)
+
+	err = services.DeleteTask(uint(id), userId)
+	if err != nil {
+		helpers.HandleTaskError(c, err)
 		return
 	}
 
-	c.String(200, "Success")
+	c.String(200, "タスクを削除しました。")
 }

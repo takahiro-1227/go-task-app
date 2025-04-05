@@ -7,10 +7,10 @@ import (
 	"log"
 )
 
-func GetTasks() (*[]types.Task, error) {
+func GetTasks(userId int) (*[]types.Task, error) {
 	var tasks []types.Task
 
-	result := config.DB.Find(&tasks)
+	result := config.DB.Where("user_id = ?", userId).Find(&tasks)
 
 	if result.Error != nil {
 		log.Println(result.Error)

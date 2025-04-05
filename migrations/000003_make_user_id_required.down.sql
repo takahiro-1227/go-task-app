@@ -1,0 +1,1 @@
+ALTER TABLE tasks MODIFY user_id INT;

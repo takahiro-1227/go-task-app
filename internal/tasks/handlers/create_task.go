@@ -20,6 +20,8 @@ func CreateTask(c *gin.Context) {
 		return
 	}
 
+	newTask.UserId = helpers.GetUserIdFromContext(c)
+
 	task, err := services.CreateTask(&newTask)
 	if err != nil {
 		helpers.HandleTaskError(c, err)
