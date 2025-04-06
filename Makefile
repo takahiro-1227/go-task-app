@@ -12,11 +12,11 @@ start:
 dev:
 	GO_ENV=development go run main.go
 
-format:
+fmt:
 	gofmt -w ./ && golangci-lint run
 
 test:
-	GO_ENV=testing go test ./tests/...
+	GO_ENV=testing go test ./tests/... -v
 
 migrate-up:
 	migrate -path migrations -database "mysql://$(MYSQL_USER):$(MYSQL_PASSWORD)@tcp($(MYSQL_HOST))/$(MYSQL_DATABASE)" -verbose up

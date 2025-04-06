@@ -3,7 +3,6 @@ package helpers
 import (
 	usersServices "go-task-app/internal/users/services"
 	usersTypes "go-task-app/internal/users/types"
-	"log"
 )
 
 func InitUser(input *usersTypes.SignUpInput) *usersTypes.SignInResponse {
@@ -21,8 +20,6 @@ func InitUser(input *usersTypes.SignUpInput) *usersTypes.SignInResponse {
 	if err != nil {
 		panic(err)
 	}
-
-	log.Println("SignIn!")
 
 	return res
 }
