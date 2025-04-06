@@ -68,16 +68,14 @@ func existsDuplicatedUserName(name string) bool {
 	return err == nil
 }
 
-func hashPassword(signUpInput *types.SignUpInput) (err error) {
+func hashPassword(signUpInput *types.SignUpInput) (string, error) {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(signUpInput.Password), constants.HashCost)
 
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	signUpInput.Password = string(hashedPassword)
-
-	return nil
+	return string(hashedPassword), nil
 }
 
 func SignUp(signUpInput *types.SignUpInput) (*types.UserResponse, error) {
@@ -95,7 +93,7 @@ func SignUp(signUpInput *types.SignUpInput) (*types.UserResponse, error) {
 		return nil, constants.ErrDuplicatedUserName
 	}
 
-	err := hashPassword(signUpInput)
+	hashedPassword, err := hashPassword(signUpInput)
 
 	if err != nil {
 		return nil, err
@@ -104,7 +102,7 @@ func SignUp(signUpInput *types.SignUpInput) (*types.UserResponse, error) {
 	var newUser types.User
 
 	newUser.Name = signUpInput.Name
-	newUser.Password = signUpInput.Password
+	newUser.Password = hashedPassword
 
 	result := config.DB.Create(&newUser)
 
