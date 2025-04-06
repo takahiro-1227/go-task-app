@@ -12,7 +12,10 @@ dev:
 
 format:
 	gofmt -w ./ && golangci-lint run
-  
+
+test:
+	GO_ENV=testing go test ./tests/...
+
 migrate-up:
 	migrate -path migrations -database "mysql://admin:admin@tcp(localhost:3306)/go_task_app" -verbose up
 
@@ -21,6 +24,9 @@ migrate-down:
 
 migrate-force:
 	migrate -path migrations -database "mysql://admin:admin@tcp(localhost:3306)/go_task_app" -verbose force $(VERSION)
+
+migrate-force-test:
+	migrate -path migrations -database "mysql://admin:admin@tcp(localhost:3306)/go_task_app_testing" -verbose force $(VERSION)
 
 create-migration:
 	migrate create -ext sql -dir migrations -seq $(NAME)

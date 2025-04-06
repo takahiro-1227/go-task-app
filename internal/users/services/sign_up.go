@@ -17,13 +17,13 @@ type keyLabelStruct struct {
 
 var keyLabel = keyLabelStruct{Name: "名前", Password: "パスワード"}
 
-func extractEmptyData(newUser *types.User) []string {
+func extractEmptyData(signUpInput *types.SignUpInput) []string {
 	var emptySlices []string
-	if newUser.Name == "" {
+	if signUpInput.Name == "" {
 		emptySlices = append(emptySlices, keyLabel.Name)
 	}
 
-	if newUser.Password == "" {
+	if signUpInput.Password == "" {
 		emptySlices = append(emptySlices, keyLabel.Password)
 	}
 
@@ -62,46 +62,51 @@ func validatePassword(password string) error {
 	return nil
 }
 
-func existsDuplicatedUserName(newUser *types.User) bool {
-	err := config.DB.Where("name = ?", newUser.Name).First(&types.User{}).Error
+func existsDuplicatedUserName(name string) bool {
+	err := config.DB.Where("name = ?", name).First(&types.User{}).Error
 
 	return err == nil
 }
 
-func hashPassword(newUser *types.User) (err error) {
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(newUser.Password), constants.HashCost)
+func hashPassword(signUpInput *types.SignUpInput) (err error) {
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(signUpInput.Password), constants.HashCost)
 
 	if err != nil {
 		return err
 	}
 
-	newUser.Password = string(hashedPassword)
+	signUpInput.Password = string(hashedPassword)
 
 	return nil
 }
 
-func SignUp(newUser *types.User) (*types.UserResponse, error) {
-	emptySlices := extractEmptyData(newUser)
+func SignUp(signUpInput *types.SignUpInput) (*types.UserResponse, error) {
+	emptySlices := extractEmptyData(signUpInput)
 
 	if len(emptySlices) > 0 {
 		return nil, errors.New(strings.Join(emptySlices, "、") + constants.ErrSuffixRequiredInput)
 	}
 
-	if err := validatePassword(newUser.Password); err != nil {
+	if err := validatePassword(signUpInput.Password); err != nil {
 		return nil, err
 	}
 
-	if existsDuplicatedUserName(newUser) {
+	if existsDuplicatedUserName(signUpInput.Name) {
 		return nil, constants.ErrDuplicatedUserName
 	}
 
-	err := hashPassword(newUser)
+	err := hashPassword(signUpInput)
 
 	if err != nil {
 		return nil, err
 	}
 
-	result := config.DB.Create(newUser)
+	var newUser types.User
+
+	newUser.Name = signUpInput.Name
+	newUser.Password = signUpInput.Password
+
+	result := config.DB.Create(&newUser)
 
 	if result.Error != nil {
 		return nil, result.Error
