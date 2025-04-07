@@ -28,3 +28,8 @@ type SignInResponse struct {
 	AccessToken string
 	User        UserResponse
 }
+
+type SignUpInput struct {
+	Name     string
+	Password string
+}

@@ -14,12 +14,13 @@ var MysqlDatabase string
 var Host string
 var AuthSecret string
 
-func LoadEnv() {
+func LoadEnv(envPath string) {
 	env := os.Getenv("GO_ENV")
-	if env == "development" {
-		err := godotenv.Load()
+	if env == "development" || env == "testing" {
+		err := godotenv.Load(envPath)
 
 		if err != nil {
+			log.Println(err)
 			log.Fatal(".env を読み込めませんでした。")
 		}
 	}
@@ -30,4 +31,8 @@ func LoadEnv() {
 	MysqlDatabase = os.Getenv("MYSQL_DATABASE")
 	Host = os.Getenv("HOST")
 	AuthSecret = os.Getenv("AUTH_SECRET")
+
+	if env == "testing" {
+		MysqlDatabase = MysqlDatabase + "_testing"
+	}
 }

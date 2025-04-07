@@ -2,15 +2,17 @@ package config
 
 import (
 	"fmt"
+	"log"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"log"
 )
 
 var DB *gorm.DB
 
-func InitDB() {
+func ConnectDB() {
 	var err error
+
 	DB, err = gorm.Open(mysql.Open(fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", MysqlUser, MysqlPassword, MysqlHost, MysqlDatabase)), &gorm.Config{})
 
 	if err != nil {

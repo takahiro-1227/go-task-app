@@ -5,6 +5,7 @@ import (
 	"go-task-app/internal/config"
 	"go-task-app/internal/users/constants"
 	"go-task-app/internal/users/types"
+	"log"
 	"strings"
 	"time"
 
@@ -42,12 +43,14 @@ func SignIn(signInInput types.SignInInput) (*types.SignInResponse, error) {
 	result := config.DB.Where("name = ?", signInInput.Name).First(&user)
 
 	if result.Error != nil {
+		log.Println(result.Error)
 		return nil, constants.ErrSignIn
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(signInInput.Password))
 
 	if err != nil {
+		log.Println(err)
 		return nil, constants.ErrSignIn
 	}
 
@@ -59,7 +62,8 @@ func SignIn(signInInput types.SignInInput) (*types.SignInResponse, error) {
 	signedToken, err := token.SignedString([]byte(config.AuthSecret))
 
 	if err != nil {
-		return nil, err
+		log.Println(err)
+		return nil, constants.ErrSignIn
 	}
 
 	userResponse := types.UserResponse{

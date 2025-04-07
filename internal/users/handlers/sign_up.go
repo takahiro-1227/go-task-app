@@ -11,9 +11,9 @@ import (
 )
 
 func SignUp(c *gin.Context) {
-	var newUser types.User
+	var signUpInput types.SignUpInput
 
-	err := c.ShouldBindJSON(&newUser)
+	err := c.ShouldBindJSON(&signUpInput)
 	if err != nil {
 		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -22,14 +22,14 @@ func SignUp(c *gin.Context) {
 		return
 	}
 
-	result, err := services.SignUp(&newUser)
+	result, err := services.SignUp(&signUpInput)
 
 	if err != nil {
 		helpers.HandleError(c, err)
 		return
 	}
 
-	c.JSON(http.StatusAccepted, gin.H{
+	c.JSON(http.StatusCreated, gin.H{
 		"user": result,
 	})
 }
