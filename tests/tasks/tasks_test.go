@@ -39,7 +39,7 @@ func TestCreateTask(t *testing.T) {
 
 	req, _ := http.NewRequest(http.MethodPost, "/task", strings.NewReader(string(createTaskInputJson)))
 
-	req.Header.Set("Authorization", "Bearer "+accessToken)
+	helpers.SetAuthHeader(req, accessToken)
 
 	globals.Router.ServeHTTP(httpRecorder, req)
 
@@ -61,7 +61,7 @@ func TestGetTasks(t *testing.T) {
 
 	req, _ := http.NewRequest(http.MethodGet, "/tasks", strings.NewReader(""))
 
-	req.Header.Set("Authorization", "Bearer "+accessToken)
+	helpers.SetAuthHeader(req, accessToken)
 
 	globals.Router.ServeHTTP(httpRecorder, req)
 
@@ -76,4 +76,28 @@ func TestGetTasks(t *testing.T) {
 
 	assert.Equal(t, len(tasksResponse.Tasks), 1)
 	assert.Equal(t, tasksResponse.Tasks[0].Title, "タスク1")
+}
+
+func TestUpdateTask(t *testing.T) {
+	httpRecorder := httptest.NewRecorder()
+
+	input := &tasksTypes.TaskInput{
+		Title: "タスク2",
+	}
+
+	inputJson, _ := json.Marshal(input)
+
+	req, _ := http.NewRequest(http.MethodPut, "/task/1", strings.NewReader(string(inputJson)))
+
+	helpers.SetAuthHeader(req, accessToken)
+
+	globals.Router.ServeHTTP(httpRecorder, req)
+
+	assert.Equal(t, http.StatusOK, httpRecorder.Code)
+
+	var task tasksTypes.Task
+
+	config.DB.Where("id = ?", 1).First(&task)
+
+	assert.Equal(t, task.Title, "タスク2")
 }
