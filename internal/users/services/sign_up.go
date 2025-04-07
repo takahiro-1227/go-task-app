@@ -5,9 +5,10 @@ import (
 	"go-task-app/internal/config"
 	"go-task-app/internal/users/constants"
 	"go-task-app/internal/users/types"
-	"golang.org/x/crypto/bcrypt"
 	"strings"
 	"unicode"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type keyLabelStruct struct {
@@ -30,13 +31,13 @@ func extractEmptyData(signUpInput *types.SignUpInput) []string {
 	return emptySlices
 }
 
-func validatePassword(password string) error {
-	if len(password) <= constants.MinPasswordLength {
-		return constants.ErrMorePasswordLength
+func ValidatePassword(password string) error {
+	if len(password) < constants.MinPasswordLength {
+		return constants.ErrLessPasswordLength
 	}
 
-	if len(password) >= constants.MaxPasswordLength {
-		return constants.ErrLessPasswordLength
+	if len(password) > constants.MaxPasswordLength {
+		return constants.ErrOverPasswordLength
 	}
 
 	hasLetter := false
@@ -85,7 +86,7 @@ func SignUp(signUpInput *types.SignUpInput) (*types.UserResponse, error) {
 		return nil, errors.New(strings.Join(emptySlices, "、") + constants.ErrSuffixRequiredInput)
 	}
 
-	if err := validatePassword(signUpInput.Password); err != nil {
+	if err := ValidatePassword(signUpInput.Password); err != nil {
 		return nil, err
 	}
 
