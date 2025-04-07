@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestPassword (t *testing.T) {
+func TestPassword(t *testing.T) {
 	err := services.ValidatePassword("testt1---_2")
 	assert.Equal(t, err, nil)
 
