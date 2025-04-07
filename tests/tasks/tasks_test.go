@@ -101,3 +101,21 @@ func TestUpdateTask(t *testing.T) {
 
 	assert.Equal(t, task.Title, "タスク2")
 }
+
+func TestDeleteTask(t *testing.T) {
+	httpRecorder := httptest.NewRecorder()
+
+	req, _ := http.NewRequest(http.MethodDelete, "/task/1", strings.NewReader(""))
+
+	helpers.SetAuthHeader(req, accessToken)
+
+	globals.Router.ServeHTTP(httpRecorder, req)
+
+	assert.Equal(t, http.StatusOK, httpRecorder.Code)
+
+	var task tasksTypes.Task
+
+	res := config.DB.Where("id = ?", 1).First(&task)
+
+	assert.Equal(t, res.Error.Error(), "record not found")
+}
