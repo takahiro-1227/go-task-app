@@ -13,7 +13,7 @@ func HandleError(c *gin.Context, err error) {
 	log.Println(err.Error())
 
 	switch err {
-	case constants.ErrSignIn, constants.ErrLessPasswordLength, constants.ErrMorePasswordLength, constants.ErrDuplicatedUserName, constants.ErrPasswordCharacterCategory:
+	case constants.ErrSignIn, constants.ErrOverPasswordLength, constants.ErrLessPasswordLength, constants.ErrDuplicatedUserName, constants.ErrPasswordCharacterCategory:
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
