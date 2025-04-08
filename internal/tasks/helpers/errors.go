@@ -12,8 +12,12 @@ func HandleTaskError(c *gin.Context, err error) {
 	log.Println(err)
 
 	switch err {
-	case constants.ErrTitleIsEmpty, constants.ErrInvalidUpdate, constants.ErrInvalidDelete:
+	case constants.ErrTitleIsEmpty:
 		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+	case constants.ErrInvalidUpdate, constants.ErrInvalidDelete:
+		c.JSON(http.StatusForbidden, gin.H{
 			"error": err.Error(),
 		})
 	case constants.ErrGetTasks, constants.ErrCreateFailed, constants.ErrUpdateFailed, constants.ErrDeleteFailed:
