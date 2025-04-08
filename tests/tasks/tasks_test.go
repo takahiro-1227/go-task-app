@@ -39,16 +39,19 @@ func createReaderFromStruct(arg any) io.Reader {
 	return strings.NewReader(string(jsonData))
 }
 
-func requestCreateTask(accessToken string, input *tasksTypes.TaskInput) *httptest.ResponseRecorder {
+func request(req *http.Request, accessToken string) *httptest.ResponseRecorder {
 	httpRecorder := httptest.NewRecorder()
 
-	req, _ := http.NewRequest(http.MethodPost, "/task", createReaderFromStruct(input))
-
 	helpers.SetAuthHeader(req, accessToken)
-
 	globals.Router.ServeHTTP(httpRecorder, req)
 
 	return httpRecorder
+}
+
+func requestCreateTask(accessToken string, input *tasksTypes.TaskInput) *httptest.ResponseRecorder {
+	req, _ := http.NewRequest(http.MethodPost, "/task", createReaderFromStruct(input))
+
+	return request(req, accessToken)
 }
 
 func TestCreateTask(t *testing.T) {
@@ -81,15 +84,9 @@ type GetTasksResponse struct {
 }
 
 func requestGetUsers(accessToken string) *httptest.ResponseRecorder {
-	httpRecorder := httptest.NewRecorder()
-
 	req, _ := http.NewRequest(http.MethodGet, "/tasks", strings.NewReader(""))
 
-	helpers.SetAuthHeader(req, accessToken)
-
-	globals.Router.ServeHTTP(httpRecorder, req)
-
-	return httpRecorder
+	return request(req, accessToken)
 }
 
 func decodeGetUsersResponse(httpRecorder *httptest.ResponseRecorder) *GetTasksResponse {
@@ -127,15 +124,9 @@ func TestGetTasksUser2(t *testing.T) {
 }
 
 func requestUpdateTask(accessToken string, taskId int, input *tasksTypes.TaskInput) *httptest.ResponseRecorder {
-	httpRecorder := httptest.NewRecorder()
-
 	req, _ := http.NewRequest(http.MethodPut, fmt.Sprintf("/task/%d", taskId), createReaderFromStruct(input))
 
-	helpers.SetAuthHeader(req, accessToken)
-
-	globals.Router.ServeHTTP(httpRecorder, req)
-
-	return httpRecorder
+	return request(req, accessToken)
 }
 
 func TestUpdateTask(t *testing.T) {
@@ -160,15 +151,9 @@ func TestUpdateTask(t *testing.T) {
 }
 
 func requestDeleteTask(accessToken string, taskId int) *httptest.ResponseRecorder {
-	httpRecorder := httptest.NewRecorder()
-
 	req, _ := http.NewRequest(http.MethodDelete, fmt.Sprintf("/task/%d", taskId), strings.NewReader(""))
 
-	helpers.SetAuthHeader(req, accessToken)
-
-	globals.Router.ServeHTTP(httpRecorder, req)
-
-	return httpRecorder
+	return request(req, accessToken)
 }
 func TestDeleteTask(t *testing.T) {
 	httpRecorder := requestDeleteTask(accessTokenUser2, 1)
