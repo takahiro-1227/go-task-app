@@ -39,21 +39,25 @@ func createReaderFromStruct(arg any) io.Reader {
 	return strings.NewReader(string(jsonData))
 }
 
+func requestCreateTask(accessToken string, input *tasksTypes.TaskInput) *httptest.ResponseRecorder {
+	httpRecorder := httptest.NewRecorder()
+
+	req, _ := http.NewRequest(http.MethodPost, "/task", createReaderFromStruct(input))
+
+	helpers.SetAuthHeader(req, accessToken)
+
+	globals.Router.ServeHTTP(httpRecorder, req)
+
+	return httpRecorder
+}
+
 func TestCreateTask(t *testing.T) {
 	helpers.InitTest()
 	setUpUsers()
 
-	httpRecorder := httptest.NewRecorder()
-
-	createTaskInput := &tasksTypes.TaskInput{
+	httpRecorder := requestCreateTask(accessTokenUser1, &tasksTypes.TaskInput{
 		Title: "タスク1",
-	}
-
-	req, _ := http.NewRequest(http.MethodPost, "/task", createReaderFromStruct(createTaskInput))
-
-	helpers.SetAuthHeader(req, accessTokenUser1)
-
-	globals.Router.ServeHTTP(httpRecorder, req)
+	})
 
 	assert.Equal(t, http.StatusCreated, httpRecorder.Code)
 
@@ -63,19 +67,12 @@ func TestCreateTask(t *testing.T) {
 }
 
 func createTaskUser2() {
-	httpRecorder := httptest.NewRecorder()
-	createTaskInput := &tasksTypes.TaskInput{
+	httpRecorder := requestCreateTask(accessTokenUser2, &tasksTypes.TaskInput{
 		Title: "タスク2",
-	}
-
-	req, _ := http.NewRequest(http.MethodPost, "/task", createReaderFromStruct(createTaskInput))
-	helpers.SetAuthHeader(req, accessTokenUser2)
-	globals.Router.ServeHTTP(httpRecorder, req)
-
+	})
 	if httpRecorder.Code == http.StatusCreated {
 		return
 	}
-
 	panic(httpRecorder)
 }
 
