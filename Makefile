@@ -15,8 +15,11 @@ dev:
 fmt:
 	gofmt -w ./ && golangci-lint run
 
-test:
+test-all:
 	GO_ENV=testing go test ./tests/... -v
+
+test:
+	GO_ENV=testing go test $(FILE) -v
 
 migrate-up:
 	migrate -path migrations -database "mysql://$(MYSQL_USER):$(MYSQL_PASSWORD)@tcp($(MYSQL_HOST))/$(MYSQL_DATABASE)" -verbose up

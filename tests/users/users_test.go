@@ -15,7 +15,7 @@ import (
 )
 
 func TestSignUp(t *testing.T) {
-	helpers.InitTest()
+	helpers.InitIntegrationTest()
 	httpRecorder := httptest.NewRecorder()
 
 	signUpInput := &usersTypes.SignUpInput{
