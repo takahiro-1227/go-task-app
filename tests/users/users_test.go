@@ -1,6 +1,7 @@
 package users
 
 import (
+	"encoding/json"
 	"go-task-app/internal/config"
 	usersTypes "go-task-app/internal/users/types"
 	"go-task-app/tests/helpers"
@@ -34,7 +35,6 @@ func TestSignUp(t *testing.T) {
 
 func TestSignIn(t *testing.T) {
 	helpers.InitIntegrationTest()
-
 	requestSignUp(&usersTypes.SignUpInput{
 		Name:     "test1",
 		Password: "test1234---2A",
@@ -44,10 +44,24 @@ func TestSignIn(t *testing.T) {
 		Name:     "test1",
 		Password: "test1234---2A",
 	}
-
 	req, _ := http.NewRequest(http.MethodPost, "/sign-in", helpers.CreateReaderFromStruct(signInInput))
-
 	httpRecorder := helpers.Request(req, nil)
-
 	assert.Equal(t, http.StatusOK, httpRecorder.Code)
+
+	var res usersTypes.SignInResponse
+	err := json.NewDecoder(httpRecorder.Body).Decode(&res)
+	if err != nil {
+		panic(err)
+	}
+
+	assert.NotNil(t, res.AccessToken)
+
+	signInInput = &usersTypes.SignInInput{
+		Name:     "test1",
+		Password: "test12345---2A",
+	}
+	req, _ = http.NewRequest(http.MethodPost, "/sign-in", helpers.CreateReaderFromStruct(signInInput))
+	httpRecorder = helpers.Request(req, nil)
+	assert.Equal(t, http.StatusBadRequest, httpRecorder.Code)
+
 }
