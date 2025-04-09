@@ -26,5 +26,5 @@ func DeleteTask(c *gin.Context) {
 		return
 	}
 
-	c.String(200, "タスクを削除しました。")
+	c.String(http.StatusOK, "タスクを削除しました。")
 }

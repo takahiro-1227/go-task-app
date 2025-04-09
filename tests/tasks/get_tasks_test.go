@@ -20,7 +20,7 @@ type GetTasksResponse struct {
 func requestGetUsers(accessToken string) *httptest.ResponseRecorder {
 	req, _ := http.NewRequest(http.MethodGet, "/tasks", strings.NewReader(""))
 
-	return tasksTestHelpers.Request(req, accessToken)
+	return helpers.Request(req, &accessToken)
 }
 
 func decodeGetUsersResponse(httpRecorder *httptest.ResponseRecorder) *GetTasksResponse {

@@ -14,9 +14,9 @@ import (
 )
 
 func requestUpdateTask(accessToken string, taskId int, input *tasksTypes.TaskInput) *httptest.ResponseRecorder {
-	req, _ := http.NewRequest(http.MethodPut, fmt.Sprintf("/task/%d", taskId), tasksTestHelpers.CreateReaderFromStruct(input))
+	req, _ := http.NewRequest(http.MethodPut, fmt.Sprintf("/task/%d", taskId), helpers.CreateReaderFromStruct(input))
 
-	return tasksTestHelpers.Request(req, accessToken)
+	return helpers.Request(req, &accessToken)
 }
 func TestUpdateTask(t *testing.T) {
 	helpers.InitIntegrationTest()

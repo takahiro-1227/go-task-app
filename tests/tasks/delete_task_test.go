@@ -17,7 +17,7 @@ import (
 func requestDeleteTask(accessToken string, taskId int) *httptest.ResponseRecorder {
 	req, _ := http.NewRequest(http.MethodDelete, fmt.Sprintf("/task/%d", taskId), strings.NewReader(""))
 
-	return tasksTestHelpers.Request(req, accessToken)
+	return helpers.Request(req, &accessToken)
 }
 func TestDeleteTask(t *testing.T) {
 	helpers.InitIntegrationTest()
