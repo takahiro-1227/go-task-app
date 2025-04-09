@@ -4,6 +4,7 @@ import (
 	"go-task-app/internal/config"
 	tasksTypes "go-task-app/internal/tasks/types"
 	"go-task-app/tests/helpers"
+	tasksTestHelpers "go-task-app/tests/tasks/helpers"
 	"net/http"
 	"testing"
 
@@ -12,9 +13,9 @@ import (
 
 func TestCreateTask(t *testing.T) {
 	helpers.InitIntegrationTest()
-	accessTokenUser1, _ := SetUpUsers()
+	accessTokenUser1, _ := tasksTestHelpers.SetUpUsers()
 
-	httpRecorder := RequestCreateTask(accessTokenUser1, &tasksTypes.TaskInput{
+	httpRecorder := tasksTestHelpers.RequestCreateTask(accessTokenUser1, &tasksTypes.TaskInput{
 		Title: "タスク1",
 	})
 

@@ -5,6 +5,7 @@ import (
 	"go-task-app/internal/config"
 	tasksTypes "go-task-app/internal/tasks/types"
 	"go-task-app/tests/helpers"
+	tasksTestHelpers "go-task-app/tests/tasks/helpers"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -13,17 +14,17 @@ import (
 )
 
 func requestUpdateTask(accessToken string, taskId int, input *tasksTypes.TaskInput) *httptest.ResponseRecorder {
-	req, _ := http.NewRequest(http.MethodPut, fmt.Sprintf("/task/%d", taskId), CreateReaderFromStruct(input))
+	req, _ := http.NewRequest(http.MethodPut, fmt.Sprintf("/task/%d", taskId), tasksTestHelpers.CreateReaderFromStruct(input))
 
-	return Request(req, accessToken)
+	return tasksTestHelpers.Request(req, accessToken)
 }
 func TestUpdateTask(t *testing.T) {
 	helpers.InitIntegrationTest()
-	accessTokenUser1, accessTokenUser2 := SetUpUsers()
-	RequestCreateTask(accessTokenUser1, &tasksTypes.TaskInput{
+	accessTokenUser1, accessTokenUser2 := tasksTestHelpers.SetUpUsers()
+	tasksTestHelpers.RequestCreateTask(accessTokenUser1, &tasksTypes.TaskInput{
 		Title: "タスク1",
 	})
-	RequestCreateTask(accessTokenUser2, &tasksTypes.TaskInput{
+	tasksTestHelpers.RequestCreateTask(accessTokenUser2, &tasksTypes.TaskInput{
 		Title: "タスク2",
 	})
 

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	tasksTypes "go-task-app/internal/tasks/types"
 	"go-task-app/tests/helpers"
+	tasksTestHelpers "go-task-app/tests/tasks/helpers"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -19,7 +20,7 @@ type GetTasksResponse struct {
 func requestGetUsers(accessToken string) *httptest.ResponseRecorder {
 	req, _ := http.NewRequest(http.MethodGet, "/tasks", strings.NewReader(""))
 
-	return Request(req, accessToken)
+	return tasksTestHelpers.Request(req, accessToken)
 }
 
 func decodeGetUsersResponse(httpRecorder *httptest.ResponseRecorder) *GetTasksResponse {
@@ -33,12 +34,12 @@ func decodeGetUsersResponse(httpRecorder *httptest.ResponseRecorder) *GetTasksRe
 }
 func TestGetTasks(t *testing.T) {
 	helpers.InitIntegrationTest()
-	accessTokenUser1, accessTokenUser2 := SetUpUsers()
+	accessTokenUser1, accessTokenUser2 := tasksTestHelpers.SetUpUsers()
 
-	RequestCreateTask(accessTokenUser1, &tasksTypes.TaskInput{
+	tasksTestHelpers.RequestCreateTask(accessTokenUser1, &tasksTypes.TaskInput{
 		Title: "タスク1",
 	})
-	RequestCreateTask(accessTokenUser1, &tasksTypes.TaskInput{
+	tasksTestHelpers.RequestCreateTask(accessTokenUser2, &tasksTypes.TaskInput{
 		Title: "タスク2",
 	})
 
@@ -46,13 +47,13 @@ func TestGetTasks(t *testing.T) {
 	assert.Equal(t, http.StatusOK, httpRecorder.Code)
 
 	tasksResponse := decodeGetUsersResponse(httpRecorder)
-	assert.Equal(t, len(tasksResponse.Tasks), 1)
+	assert.Equal(t, 1, len(tasksResponse.Tasks))
 	assert.Equal(t, tasksResponse.Tasks[0].Title, "タスク1")
 
 	httpRecorder = requestGetUsers(accessTokenUser2)
 	assert.Equal(t, http.StatusOK, httpRecorder.Code)
 
 	tasksResponse = decodeGetUsersResponse(httpRecorder)
-	assert.Equal(t, len(tasksResponse.Tasks), 1)
+	assert.Equal(t, 1, len(tasksResponse.Tasks))
 	assert.Equal(t, tasksResponse.Tasks[0].Title, "タスク2")
 }
