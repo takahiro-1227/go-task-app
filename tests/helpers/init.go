@@ -13,10 +13,18 @@ func initDB() {
 	config.DB.Exec("SET FOREIGN_KEY_CHECKS = 1")
 }
 
-func InitTest() {
-	config.LoadEnv("../../.env")
+var envLoaded bool
+
+func InitIntegrationTest() {
+	if !envLoaded {
+		config.LoadEnv("../../.env")
+		envLoaded = true
+	}
+
 	config.ConnectDB()
 	initDB()
 
-	globals.Router = routes.SetUpRouter()
+	if globals.Router == nil {
+		globals.Router = routes.SetUpRouter()
+	}
 }
