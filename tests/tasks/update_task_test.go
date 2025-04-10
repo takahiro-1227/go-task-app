@@ -18,6 +18,7 @@ func requestUpdateTask(accessToken string, taskId int, input *tasksTypes.TaskInp
 
 	return helpers.Request(req, &accessToken)
 }
+
 func TestUpdateTask(t *testing.T) {
 	helpers.InitIntegrationTest()
 	accessTokenUser1, accessTokenUser2 := tasksTestHelpers.SetUpUsers()
@@ -31,7 +32,6 @@ func TestUpdateTask(t *testing.T) {
 	httpRecorder := requestUpdateTask(accessTokenUser1, 1, &tasksTypes.TaskInput{
 		Title: "タスク2",
 	})
-
 	assert.Equal(t, http.StatusOK, httpRecorder.Code)
 
 	var task tasksTypes.Task
@@ -41,7 +41,6 @@ func TestUpdateTask(t *testing.T) {
 	httpRecorder = requestUpdateTask(accessTokenUser2, 1, &tasksTypes.TaskInput{
 		Title: "タスク1",
 	})
-
 	assert.Equal(t, http.StatusForbidden, httpRecorder.Code)
 
 	config.DB.Where("id = ?", 1).First(&task)

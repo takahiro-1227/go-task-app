@@ -30,19 +30,15 @@ func TestDeleteTask(t *testing.T) {
 	})
 
 	httpRecorder := requestDeleteTask(accessTokenUser2, 1)
-
 	assert.Equal(t, http.StatusForbidden, httpRecorder.Code)
 
 	var task tasksTypes.Task
 	config.DB.Where("id = ?", 1).First(&task)
-
 	assert.Equal(t, task.Title, "タスク1")
 
 	httpRecorder = requestDeleteTask(accessTokenUser1, 1)
-
 	assert.Equal(t, http.StatusOK, httpRecorder.Code)
 
 	res := config.DB.Where("id = ?", 1).First(&task)
-
 	assert.Equal(t, res.Error.Error(), "record not found")
 }

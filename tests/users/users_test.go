@@ -23,13 +23,10 @@ func TestSignUp(t *testing.T) {
 		Name:     "test1",
 		Password: "test1234---2A",
 	})
-
 	assert.Equal(t, http.StatusCreated, httpRecorder.Code)
 
 	var users []usersTypes.User
-
 	config.DB.Find(&users)
-
 	assert.Equal(t, users[0].Name, "test1")
 }
 
@@ -53,7 +50,6 @@ func TestSignIn(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-
 	assert.NotNil(t, res.AccessToken)
 
 	signInInput = &usersTypes.SignInInput{
@@ -63,5 +59,4 @@ func TestSignIn(t *testing.T) {
 	req, _ = http.NewRequest(http.MethodPost, "/sign-in", helpers.CreateReaderFromStruct(signInInput))
 	httpRecorder = helpers.Request(req, nil)
 	assert.Equal(t, http.StatusBadRequest, httpRecorder.Code)
-
 }
