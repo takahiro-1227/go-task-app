@@ -11,8 +11,8 @@ var MysqlUser string
 var MysqlPassword string
 var MysqlHost string
 var MysqlDatabase string
-var Host string
 var AuthSecret string
+var Port string
 
 func LoadEnv(envPath string) {
 	env := os.Getenv("GO_ENV")
@@ -29,8 +29,8 @@ func LoadEnv(envPath string) {
 	MysqlPassword = os.Getenv("MYSQL_PASSWORD")
 	MysqlHost = os.Getenv("MYSQL_HOST")
 	MysqlDatabase = os.Getenv("MYSQL_DATABASE")
-	Host = os.Getenv("HOST")
 	AuthSecret = os.Getenv("AUTH_SECRET")
+	Port = os.Getenv("PORT")
 
 	if env == "testing" {
 		MysqlDatabase = MysqlDatabase + "_testing"

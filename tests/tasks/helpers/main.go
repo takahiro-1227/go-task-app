@@ -24,7 +24,7 @@ func SetUpUsers() (string, string) {
 	return accessTokenUser1, accessTokenUser2
 }
 
-func RequestCreateTask(accessToken string, input *tasksTypes.TaskInput) *httptest.ResponseRecorder {
+func RequestCreateTask(accessToken string, input *tasksTypes.TaskHandlerInput) *httptest.ResponseRecorder {
 	req, _ := http.NewRequest(http.MethodPost, "/task", helpers.CreateReaderFromStruct(input))
 
 	return helpers.Request(req, &accessToken)

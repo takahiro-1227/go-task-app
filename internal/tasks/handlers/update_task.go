@@ -19,9 +19,9 @@ func UpdateTask(c *gin.Context) {
 		return
 	}
 
-	var newTask types.Task
+	var taskInput types.TaskHandlerInput
 
-	err = c.ShouldBindJSON(&newTask)
+	err = c.ShouldBindJSON(&taskInput)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -30,10 +30,11 @@ func UpdateTask(c *gin.Context) {
 		return
 	}
 
-	newTask.ID = uint(id)
-	newTask.UserId = helpers.GetUserIdFromContext(c)
-
-	result, err := services.UpdateTask(&newTask)
+	result, err := services.UpdateTask(&types.UpdateTaskServiceInput{
+		ID:     uint(id),
+		Title:  taskInput.Title,
+		UserId: helpers.GetUserIdFromContext(c),
+	})
 
 	if err != nil {
 		helpers.HandleTaskError(c, err)

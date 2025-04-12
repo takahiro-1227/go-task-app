@@ -6,15 +6,20 @@ import (
 	"go-task-app/internal/tasks/types"
 )
 
-func CreateTask(newTask *types.Task) (*types.Task, error) {
-	if newTask.Title == "" {
+func CreateTask(taskInput *types.CreateTaskServiceInput) (*types.Task, error) {
+	if taskInput.Title == "" {
 		return nil, constants.ErrTitleIsEmpty
 	}
+
+	var newTask types.Task
+
+	newTask.Title = taskInput.Title
+	newTask.UserId = taskInput.UserId
 
 	result := config.DB.Create(&newTask)
 	if result.Error != nil {
 		return nil, constants.ErrCreateFailed
 	}
 
-	return newTask, nil
+	return &newTask, nil
 }

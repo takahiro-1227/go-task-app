@@ -8,20 +8,27 @@ import (
 	"time"
 )
 
-func UpdateTask(newTask *types.Task) (*types.Task, error) {
-	if newTask.Title == "" {
+func UpdateTask(taskInput *types.UpdateTaskServiceInput) (*types.TaskServiceResponse, error) {
+	if taskInput.Title == "" {
 		return nil, constants.ErrTitleIsEmpty
 	}
 
-	if !helpers.IsTaskOwnedByUser(newTask.ID, newTask.UserId) {
+	if !helpers.IsTaskOwnedByUser(taskInput.ID, taskInput.UserId) {
 		return nil, constants.ErrInvalidUpdate
 	}
 
-	result := config.DB.Where("id = ?", newTask.ID).Model(&types.Task{}).Updates(types.Task{Title: newTask.Title, UpdatedAt: time.Now()})
+	updatedAt := time.Now()
+
+	result := config.DB.Where("id = ?", taskInput.ID).Model(&types.Task{}).Updates(types.Task{Title: taskInput.Title, UpdatedAt: updatedAt})
 
 	if result.Error != nil {
 		return nil, constants.ErrUpdateFailed
 	}
 
-	return newTask, nil
+	return &types.TaskServiceResponse{
+		ID:        taskInput.ID,
+		Title:     taskInput.Title,
+		UpdatedAt: updatedAt,
+		UserId:    taskInput.UserId,
+	}, nil
 }
