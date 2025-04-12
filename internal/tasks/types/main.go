@@ -5,31 +5,31 @@ import (
 )
 
 type Task struct {
-	ID        uint      `gorm:"primary_key"`
-	Title     string    `gorm:"type:varchar(255); unique; not null"`
-	CreatedAt time.Time `gorm:"autoCreateTime"`
-	UpdatedAt time.Time `gorm:"autoUpdateTime"`
-	UserId    int       `gorm:"not null"`
+	ID        uint      `gorm:"primary_key" json:"id"`
+	Title     string    `gorm:"type:varchar(255); unique; not null" json:"title"`
+	CreatedAt time.Time `gorm:"autoCreateTime" json:"created_at"`
+	UpdatedAt time.Time `gorm:"autoUpdateTime" json:"updated_at"`
+	UserId    int       `gorm:"not null" json:"user_id"`
 }
 
 type TaskHandlerInput struct {
-	Title string
+	Title string `json:"title"`
 }
 
 type CreateTaskServiceInput struct {
-	Title  string
-	UserId int
+	Title  string `json:"title"`
+	UserId int    `json:"user_id"`
 }
 
 type UpdateTaskServiceInput struct {
-	ID     uint
-	Title  string
-	UserId int
+	ID     uint   `json:"id"`
+	Title  string `json:"title"`
+	UserId int    `json:"user_id"`
 }
 
 type TaskServiceResponse struct {
-	ID        uint
-	Title     string
-	UpdatedAt time.Time
-	UserId    int
+	ID        uint      `json:"id"`
+	Title     string    `json:"title"`
+	UpdatedAt time.Time `json:"updated_at"`
+	UserId    int       `json:"user_id"`
 }
