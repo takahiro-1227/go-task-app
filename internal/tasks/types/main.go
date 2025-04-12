@@ -12,9 +12,24 @@ type Task struct {
 	UserId    int       `gorm:"not null"`
 }
 
-type TaskInput struct {
+type TaskHandlerInput struct {
+	Title string
+}
+
+type CreateTaskServiceInput struct {
+	Title  string
+	UserId int
+}
+
+type UpdateTaskServiceInput struct {
+	ID     uint
+	Title  string
+	UserId int
+}
+
+type TaskServiceResponse struct {
 	ID        uint
 	Title     string
-	CreatedAt time.Time
 	UpdatedAt time.Time
+	UserId    int
 }

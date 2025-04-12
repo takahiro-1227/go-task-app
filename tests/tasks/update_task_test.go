@@ -13,7 +13,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func requestUpdateTask(accessToken string, taskId int, input *tasksTypes.TaskInput) *httptest.ResponseRecorder {
+func requestUpdateTask(accessToken string, taskId int, input *tasksTypes.TaskHandlerInput) *httptest.ResponseRecorder {
 	req, _ := http.NewRequest(http.MethodPut, fmt.Sprintf("/task/%d", taskId), helpers.CreateReaderFromStruct(input))
 
 	return helpers.Request(req, &accessToken)
@@ -22,14 +22,14 @@ func requestUpdateTask(accessToken string, taskId int, input *tasksTypes.TaskInp
 func TestUpdateTask(t *testing.T) {
 	helpers.InitIntegrationTest()
 	accessTokenUser1, accessTokenUser2 := tasksTestHelpers.SetUpUsers()
-	tasksTestHelpers.RequestCreateTask(accessTokenUser1, &tasksTypes.TaskInput{
+	tasksTestHelpers.RequestCreateTask(accessTokenUser1, &tasksTypes.TaskHandlerInput{
 		Title: "タスク1",
 	})
-	tasksTestHelpers.RequestCreateTask(accessTokenUser2, &tasksTypes.TaskInput{
+	tasksTestHelpers.RequestCreateTask(accessTokenUser2, &tasksTypes.TaskHandlerInput{
 		Title: "タスク2",
 	})
 
-	httpRecorder := requestUpdateTask(accessTokenUser1, 1, &tasksTypes.TaskInput{
+	httpRecorder := requestUpdateTask(accessTokenUser1, 1, &tasksTypes.TaskHandlerInput{
 		Title: "タスク2",
 	})
 	assert.Equal(t, http.StatusOK, httpRecorder.Code)
@@ -38,7 +38,7 @@ func TestUpdateTask(t *testing.T) {
 	config.DB.Where("id = ?", 1).First(&task)
 	assert.Equal(t, task.Title, "タスク2")
 
-	httpRecorder = requestUpdateTask(accessTokenUser2, 1, &tasksTypes.TaskInput{
+	httpRecorder = requestUpdateTask(accessTokenUser2, 1, &tasksTypes.TaskHandlerInput{
 		Title: "タスク1",
 	})
 	assert.Equal(t, http.StatusForbidden, httpRecorder.Code)

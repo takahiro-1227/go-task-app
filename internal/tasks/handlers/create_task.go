@@ -10,9 +10,9 @@ import (
 )
 
 func CreateTask(c *gin.Context) {
-	var newTask types.Task
+	var taskInput types.TaskHandlerInput
 
-	err := c.ShouldBindJSON(&newTask)
+	err := c.ShouldBindJSON(&taskInput)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "入力値が不正です。",
@@ -20,9 +20,10 @@ func CreateTask(c *gin.Context) {
 		return
 	}
 
-	newTask.UserId = helpers.GetUserIdFromContext(c)
-
-	task, err := services.CreateTask(&newTask)
+	task, err := services.CreateTask(&types.CreateTaskServiceInput{
+		Title:  taskInput.Title,
+		UserId: helpers.GetUserIdFromContext(c),
+	})
 	if err != nil {
 		helpers.HandleTaskError(c, err)
 		return

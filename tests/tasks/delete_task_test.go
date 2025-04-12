@@ -22,10 +22,10 @@ func requestDeleteTask(accessToken string, taskId int) *httptest.ResponseRecorde
 func TestDeleteTask(t *testing.T) {
 	helpers.InitIntegrationTest()
 	accessTokenUser1, accessTokenUser2 := tasksTestHelpers.SetUpUsers()
-	tasksTestHelpers.RequestCreateTask(accessTokenUser1, &tasksTypes.TaskInput{
+	tasksTestHelpers.RequestCreateTask(accessTokenUser1, &tasksTypes.TaskHandlerInput{
 		Title: "タスク1",
 	})
-	tasksTestHelpers.RequestCreateTask(accessTokenUser2, &tasksTypes.TaskInput{
+	tasksTestHelpers.RequestCreateTask(accessTokenUser2, &tasksTypes.TaskHandlerInput{
 		Title: "タスク2",
 	})
 

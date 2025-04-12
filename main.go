@@ -12,7 +12,7 @@ func main() {
 
 	router := routes.SetUpRouter()
 
-	err := router.Run(":4000")
+	err := router.Run(":" + config.Port)
 
 	if err != nil {
 		log.Fatalf("サーバーの起動に失敗しました: %v", err)

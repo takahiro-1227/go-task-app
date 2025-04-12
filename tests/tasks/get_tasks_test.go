@@ -35,10 +35,10 @@ func decodeGetUsersResponse(httpRecorder *httptest.ResponseRecorder) *GetTasksRe
 func TestGetTasks(t *testing.T) {
 	helpers.InitIntegrationTest()
 	accessTokenUser1, accessTokenUser2 := tasksTestHelpers.SetUpUsers()
-	tasksTestHelpers.RequestCreateTask(accessTokenUser1, &tasksTypes.TaskInput{
+	tasksTestHelpers.RequestCreateTask(accessTokenUser1, &tasksTypes.TaskHandlerInput{
 		Title: "タスク1",
 	})
-	tasksTestHelpers.RequestCreateTask(accessTokenUser2, &tasksTypes.TaskInput{
+	tasksTestHelpers.RequestCreateTask(accessTokenUser2, &tasksTypes.TaskHandlerInput{
 		Title: "タスク2",
 	})
 

@@ -15,7 +15,7 @@ func TestCreateTask(t *testing.T) {
 	helpers.InitIntegrationTest()
 	accessTokenUser1, _ := tasksTestHelpers.SetUpUsers()
 
-	httpRecorder := tasksTestHelpers.RequestCreateTask(accessTokenUser1, &tasksTypes.TaskInput{
+	httpRecorder := tasksTestHelpers.RequestCreateTask(accessTokenUser1, &tasksTypes.TaskHandlerInput{
 		Title: "タスク1",
 	})
 
