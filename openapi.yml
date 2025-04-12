@@ -1,6 +1,7 @@
 openapi: 3.0.4
 info:
   title: Go Task App
+  version: 1.0.0
 servers:
   - url: https://localhost:4000
 tags:
@@ -161,7 +162,9 @@ paths:
             application/json:
               schema:
                 properties:
-                  task:
+                  access_token:
+                    type: string
+                  user:
                     $ref: "#/components/schemas/User"
         '400':
           description: 入力値が不正
@@ -212,13 +215,13 @@ components:
         title:
           type: string
           example: タスク1
-        createdAt:
+        created_at:
           type: string
           format: date-time
-        updatedAt:
+        updated_at:
           type: string
           format: date-time
-        userId:
+        user_id:
           type: integer
           format: int64
           example: 1
@@ -232,7 +235,7 @@ components:
         name:
           type: string
           example: satoru-gojo
-        createdAt:
+        created_at:
           type: string
           format: date-time
     Error:
