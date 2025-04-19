@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"go-task-app/internal/tasks/helpers"
+	"go-task-app/internal/tasks/repo"
 	"go-task-app/internal/tasks/services"
 	"go-task-app/internal/tasks/types"
 	"net/http"
@@ -20,10 +21,16 @@ func CreateTask(c *gin.Context) {
 		return
 	}
 
-	task, err := services.CreateTask(&types.CreateTaskServiceInput{
-		Title:  taskInput.Title,
-		UserId: helpers.GetUserIdFromContext(c),
-	})
+	task, err := services.CreateTask(
+		&types.CreateTaskServiceInput{
+			Title:  taskInput.Title,
+			UserId: helpers.GetUserIdFromContext(c),
+		},
+		&services.Repo{
+			CreateTask: repo.CreateTask,
+		},
+	)
+
 	if err != nil {
 		helpers.HandleTaskError(c, err)
 		return
