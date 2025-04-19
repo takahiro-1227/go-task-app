@@ -21,6 +21,11 @@ type CreateTaskServiceInput struct {
 	UserId int    `json:"user_id"`
 }
 
+type CreateTaskRepoInput struct {
+	Title  string `json:"title"`
+	UserId int    `json:"user_id"`
+}
+
 type UpdateTaskServiceInput struct {
 	ID     uint   `json:"id"`
 	Title  string `json:"title"`

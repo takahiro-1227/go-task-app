@@ -16,7 +16,7 @@ fmt:
 	gofmt -w ./ && golangci-lint run
 
 test-all:
-	GO_ENV=testing go test ./tests/... -v
+	GO_ENV=testing go test ./tests/...
 
 test:
 	GO_ENV=testing go test $(FILE) -v
